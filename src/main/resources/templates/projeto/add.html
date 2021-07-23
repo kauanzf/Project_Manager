@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
+    <title>Projeto</title>
+    <!--CSS-->
+    <link rel="stylesheet" th:href="@{/bootstrap-5.0.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/fontawesome-5.15.3/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+
+</head>
+<body>
+    <!--NAV-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" th:href="@{/}">Project Manager</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" th:href="@{/}">Principal</a>
+              </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/projeto/list}">Projetos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/risco/list}">Riscos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/situacao/list}">Situações</a>
+                </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+      
+    <div class="container container-header-cargo">
+      <h3>Projetos</h3>
+    </div>
+
+    <div class="container container-form-cargo">
+      <form th:action="@{/projeto/save}"
+        method="post"
+        th:object="${projeto}"
+      >
+          <div th:if="${erro}" class="alert alert-danger">
+              <span th:text="${erroMsg}"></span>
+          </div>
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" 
+            id="floatingInputId" placeholder="Código"
+            disabled th:field="*{id}">
+          <label for="floatingInputId">Código</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" 
+            id="floatingInputNome" placeholder="Nome"
+            th:field="*{nome}" required>
+          <label for="floatingInputNome">Nome</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control"
+             id="floatingInputDescricao" placeholder="Descrição do projeto"
+             th:field="*{descricao}" required>
+          <label for="floatingInputDescricao">Descrição</label>
+        </div>
+
+          <div class="form-floating mb-3">
+              <select class="form-select" id="floatingSelectRisco"
+                      aria-label="Selecione o risco"
+                      th:field="*{risco.id}" required >
+                  <option th:each="r : ${riscos}"
+                          th:value="${r.id}"
+                          th:text="${r}"></option>
+              </select>
+              <label for="floatingSelectRisco">Selecione o risco</label>
+          </div>
+
+          <div class="form-floating mb-3">
+              <select class="form-select" id="floatingSelectSituacao"
+                      aria-label="Selecione a situação"
+                      th:field="*{situacao.id}" required >
+                  <option th:each="s : ${situacoes}"
+                          th:value="${s.id}"
+                          th:text="${s}"></option>
+              </select>
+              <label for="floatingSelectSituacao">Selecione a situação</label>
+          </div>
+
+          <div class="form-floating mb-3">
+              <input type="number" class="form-control" step="0.01"
+                     id="floatingInputOrcamento" placeholder="Orçamento"
+                     th:field="*{orcamento}" required>
+              <label for="floatingInputOrcamento">Orçamento</label>
+          </div>
+
+          <div class="row form-floating mb-3">
+              <div class="form-floating col">
+                  <input type="date" class="form-control"
+                         id="floatingInputDataInicial" placeholder="  Data Inicial"
+                         th:field="*{dataInicial}" required>
+                  <label for="floatingInputDataInicial">  Data Inicial</label>
+              </div>
+              <div class="form-floating col">
+                  <input type="date" class="form-control"
+                         id="floatingInputDataFinal" placeholder="  Data Final"
+                         th:field="*{dataFinal}" required>
+                  <label for="floatingInputDataFinal">  Data Final</label>
+              </div>
+          </div>
+
+          <div class="form-floating mb-3">
+              <select class="form-select" id="floatingSelectGerente"
+                      aria-label="Selecione o gerente"
+                      th:field="*{gerente.id}" required >
+                  <option th:each="g : ${gerentes}"
+                        th:value="${g.id}"
+                        th:text="${g.nome}">
+                  </option>
+              </select>
+              <label for="floatingSelectRisco">Selecione o gerente</label>
+          </div>
+
+          <div class="form-floating mb-3">
+              <select class="form-select select-multiple" id="floatingSelectFuncionarios"
+                      aria-label="Selecione um funcionário"
+                      th:field="*{funcionarios}"
+                      multiple>
+                  <option th:each="pf : ${funcionarios}"
+                    th:value="${pf.id}"
+                    th:text="${pf.nome}">
+                  </option>
+              </select>
+              <label for="floatingSelectRisco">Selecione os funcionários</label>
+          </div>
+
+
+          <div class="row">
+           <div class="col">
+               <a th:href="@{/projeto/list}"
+                  class="btn btn-outline-secondary btn-form">
+                   <i class="fa fa-backspace"></i> Voltar
+               </a>
+           </div>
+           <div class="col">
+              <button type="submit"
+                  class="btn btn-outline-success btn-form">
+                   <i class="fa fa-save"></i> Salvar
+              </button>
+            </div>
+        </div>
+      </form>
+    </div>
+
+    <!--JS-->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/bootstrap-5.0.1/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

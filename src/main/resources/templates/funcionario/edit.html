@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}">
+    <title>Funcionários</title>
+    <!--CSS-->
+    <link rel="stylesheet" th:href="@{/bootstrap-5.0.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/fontawesome-5.15.3/css/all.css}">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+    <!--NAV-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" th:href="@{/}">Project Manager</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" th:href="@{/}">Principal</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" th:href="@{/funcionario/list}">Funcionários</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/cargo/list}">Cargos</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+      
+    <div class="container container-header-funcionario">
+      <h3>Funcionários</h3>
+    </div>
+
+    <div class="container container-form-funcionario">
+      <form th:action="@{/funcionario/save}" 
+        method="post"
+        th:object="${funcionario}"
+      >
+          <div th:if="${erro}" class="alert alert-danger">
+              <span th:text="${erroMsg}"></span>
+          </div>
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" 
+            id="floatingInputId" placeholder="Código"
+            th:field="${funcionario.id}" readonly>
+          <label for="floatingInputId">Código</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" 
+            id="floatingInputNome" placeholder="Nome"
+            th:field="${funcionario.nome}" required>
+          <label for="floatingInputNome">Nome</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" 
+            id="floatingInputEmail" placeholder="E-mail"
+            th:field="${funcionario.email}" required>
+          <label for="floatingInputEmail">E-mal</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control"
+            id="floatingInputTelefone" placeholder="Telefone"
+            th:field="${funcionario.telefone}" required>
+          <label for="floatingInputTelefone">Telefone</label>
+        </div>
+
+          <div class="form-floating mb-3">
+              <select class="form-select" id="floatingSelect"
+                      aria-label="Selecione um cargo"
+                      th:field="${funcionario.cargo.id}" required >
+                  <option th:each="c : ${cargos}"
+                          th:value="${c.id}"
+                          th:text="${c}"></option>
+
+              </select>
+              <label for="floatingSelect">Selecione um cargo</label>
+          </div>
+
+          <div class="row">
+              <div class="col">
+                  <a th:href="@{/funcionario/list}"
+                     class="btn btn-outline-secondary btn-form">
+                      <i class="fa fa-backspace"></i> Voltar
+                  </a>
+              </div>
+              <div class="col">
+                  <button type="submit"
+                    class="btn btn-outline-success btn-form">
+                      <i class="fa fa-save"></i> Salvar
+                  </button>
+              </div>
+          </div>
+      </form>
+    </div>
+
+    
+    <!--JS-->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/bootstrap-5.0.1/js/bootstrap.min.js}"></script>
+    
+
+
+</body>
+</html>
